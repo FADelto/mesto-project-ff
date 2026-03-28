@@ -6,7 +6,6 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Mesto</title>
-  <link rel="stylesheet" href="./pages/index.css">
 </head>
 <body class="page">
 <div class="page__content">
@@ -33,29 +32,53 @@
       © 2021 Mesto Russia
     </p>
   </footer>
-  <div class="popup popup_type_edit">
+  <div class="popup popup_type_edit popup_is-animated">
     <div class="popup__content">
       <button type="button" class="popup__close"></button>
       <h3 class="popup__title">Редактировать профиль</h3>
-      <form class="popup__form" name="edit-profile">
-        <input type="text" name="name" class="popup__input popup__input_type_name" placeholder="Имя" required>
-        <input type="text" name="description" class="popup__input popup__input_type_description" placeholder="Занятие" required>
+      <form class="popup__form" name="edit-profile" novalidate>
+        <input id="profile-name-input" type="text" name="name" class="popup__input popup__input_type_name"
+          placeholder="Имя" required minlength="2" maxlength="40"
+          pattern="[a-zA-Zа-яА-ЯёЁ \-]+"
+          data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
+        <span class="profile-name-input-error popup__error"></span>
+        <input id="profile-description-input" type="text" name="description" class="popup__input popup__input_type_description"
+          placeholder="О себе" required minlength="2" maxlength="200">
+        <span class="profile-description-input-error popup__error"></span>
         <button type="submit" class="button popup__button">Сохранить</button>
       </form>
     </div>
   </div>
-  <div class="popup popup_type_new-card">
+  <div class="popup popup_type_new-card popup_is-animated">
     <div class="popup__content">
       <button type="button" class="popup__close"></button>
       <h3 class="popup__title">Новое место</h3>
-      <form class="popup__form" name="new-place">
-        <input type="text" name="place-name" class="popup__input popup__input_type_card-name" placeholder="Название" required>
-        <input type="url" name="link" class="popup__input popup__input_type_url" placeholder="Ссылка на картинку" required>
+      <form class="popup__form" name="new-place" novalidate>
+        <input id="place-name-input" type="text" name="place-name" class="popup__input popup__input_type_card-name"
+          placeholder="Название" required minlength="2" maxlength="30"
+          pattern="[a-zA-Zа-яА-ЯёЁ \-]+"
+          data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
+        <span class="place-name-input-error popup__error"></span>
+        <input id="place-link-input" type="url" name="link" class="popup__input popup__input_type_url"
+          placeholder="Ссылка на картинку" required>
+        <span class="place-link-input-error popup__error"></span>
+        <button type="submit" class="button popup__button">Создать</button>
+      </form>
+    </div>
+  </div>
+  <div class="popup popup_type_edit-avatar popup_is-animated">
+    <div class="popup__content">
+      <button type="button" class="popup__close"></button>
+      <h3 class="popup__title">Обновить аватар</h3>
+      <form class="popup__form" name="edit-avatar" novalidate>
+        <input id="avatar-link-input" type="url" name="avatar" class="popup__input popup__input_type_url"
+          placeholder="Ссылка на картинку" required>
+        <span class="avatar-link-input-error popup__error"></span>
         <button type="submit" class="button popup__button">Сохранить</button>
       </form>
     </div>
   </div>
-  <div class="popup popup_type_image">
+  <div class="popup popup_type_image popup_is-animated">
     <div class="popup__content popup__content_content_image">
       <button type="button" class="popup__close"></button>
       <img src="" alt="" class="popup__image">
@@ -63,17 +86,16 @@
     </div>
   </div>
 </div>
-<script src="./scripts/cards.js"></script>
-<script src="./scripts/index.js" defer></script>
-
 <template id="card-template">
   <li class="places__item card">
     <img class="card__image" src="" alt="" />
     <button type="button" class="card__delete-button"></button>
     <div class="card__description">
-      <h2 class="card__title">
-      </h2>
-      <button type="button" class="card__like-button"></button>
+      <h2 class="card__title"></h2>
+      <div class="card__like-container">
+        <button type="button" class="card__like-button"></button>
+        <span class="card__like-count">0</span>
+      </div>
     </div>
   </li>
 </template>
