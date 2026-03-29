@@ -1,6 +1,6 @@
 import '../pages/index.css';
 import logoImage from '../images/logo.svg';
-import { createCard, removeCardElement } from './card.js';
+import { createCard, removeCardElement, toggleLike } from './card.js';
 import { openModal, closeModal, handleOverlayClose } from './modal.js';
 import { enableValidation, clearValidation } from './validation.js';
 import { getUser, getCards, updateUser, addCard, removeCard, likeCard, unlikeCard, updateAvatar } from './api.js';
@@ -26,7 +26,11 @@ const nameInput = editForm.querySelector('.popup__input_type_name');
 const descriptionInput = editForm.querySelector('.popup__input_type_description');
 
 const newCardForm = document.forms['new-place'];
+const cardNameInput = newCardForm.querySelector('.popup__input_type_card-name');
+const cardLinkInput = newCardForm.querySelector('.popup__input_type_url');
+
 const avatarForm = document.forms['edit-avatar'];
+const avatarInput = avatarForm.querySelector('.popup__input_type_url');
 
 const imageElement = imagePopup.querySelector('.popup__image');
 const captionElement = imagePopup.querySelector('.popup__caption');
@@ -58,7 +62,7 @@ function handleLike(cardId, likeButton, likeCountElement, isLiked) {
   const request = isLiked ? unlikeCard(cardId) : likeCard(cardId);
   request
     .then(updatedCard => {
-      likeButton.classList.toggle('card__like-button_is-active');
+      toggleLike(likeButton);
       likeCountElement.textContent = updatedCard.likes.length;
     })
     .catch(err => console.log(err));
@@ -74,7 +78,7 @@ function handleImageClick(cardData) {
 // обработчики форм
 function handleEditFormSubmit(evt) {
   evt.preventDefault();
-  const submitButton = editForm.querySelector('.popup__button');
+  const submitButton = evt.submitter;
   renderLoading(submitButton, true);
 
   updateUser(nameInput.value, descriptionInput.value)
@@ -89,18 +93,14 @@ function handleEditFormSubmit(evt) {
 
 function handleNewCardFormSubmit(evt) {
   evt.preventDefault();
-  const submitButton = newCardForm.querySelector('.popup__button');
+  const submitButton = evt.submitter;
   renderLoading(submitButton, true, 'Создать');
 
-  const cardName = newCardForm.querySelector('.popup__input_type_card-name').value;
-  const cardLink = newCardForm.querySelector('.popup__input_type_url').value;
-
-  addCard(cardName, cardLink)
+  addCard(cardNameInput.value, cardLinkInput.value)
     .then(newCardData => {
       const card = createCard(newCardData, { deleteCard: handleDelete, likeCard: handleLike, openImage: handleImageClick }, userId);
       placesList.prepend(card);
       newCardForm.reset();
-      clearValidation(newCardForm, validationConfig);
       closeModal(newCardPopup);
     })
     .catch(err => console.log(err))
@@ -109,16 +109,13 @@ function handleNewCardFormSubmit(evt) {
 
 function handleAvatarFormSubmit(evt) {
   evt.preventDefault();
-  const submitButton = avatarForm.querySelector('.popup__button');
+  const submitButton = evt.submitter;
   renderLoading(submitButton, true);
 
-  const avatarUrl = avatarForm.querySelector('.popup__input_type_url').value;
-
-  updateAvatar(avatarUrl)
+  updateAvatar(avatarInput.value)
     .then(res => {
       profileImage.style.backgroundImage = `url('${res.avatar}')`;
       avatarForm.reset();
-      clearValidation(avatarForm, validationConfig);
       closeModal(avatarPopup);
     })
     .catch(err => console.log(err))

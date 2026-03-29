@@ -37,6 +37,10 @@ export function createCard(cardData, callbacks, userId) {
   return cardElement;
 }
 
+export function toggleLike(likeButton) {
+  likeButton.classList.toggle('card__like-button_is-active');
+}
+
 export function removeCardElement(cardElement) {
   cardElement.remove();
 }

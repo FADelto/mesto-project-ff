@@ -15,8 +15,6 @@ function hideInputError(formElement, inputElement, settings) {
 function isValid(formElement, inputElement, settings) {
   if (inputElement.validity.patternMismatch) {
     inputElement.setCustomValidity(inputElement.dataset.errorMessage);
-  } else if (inputElement.validity.tooShort) {
-    inputElement.setCustomValidity(`Минимальное количество символов: ${inputElement.minLength}. Длина текста сейчас: ${inputElement.value.length} символ.`);
   } else {
     inputElement.setCustomValidity('');
   }
